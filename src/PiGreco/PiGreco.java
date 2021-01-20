@@ -4,16 +4,20 @@ import java.util.Scanner;
 
 public class PiGreco {
     public final double rad;
+    private double l;
+    private double r;
 
     public PiGreco() {
         rad = Math.toRadians(180);
+        l=1;
+        r=1;
     }
 
     public static void main(String [] args){
         Scanner sc = new Scanner(System.in);
         PiGreco pi = new PiGreco();
         do {
-            System.out.println("Metodo singolo o ciclo (1-2, 3:fine)");
+            System.out.println("Metodo seno o calcolo (1-2, 3:fine)");
             int scelta = sc.nextInt();
             if (scelta == 1) {
                 pi.aproximateN();
@@ -36,11 +40,23 @@ public class PiGreco {
     }
 
     public void aproximateCicle() {
+        l = 1;
+        r = 1;
         Scanner sc = new Scanner(System.in);
-        System.out.println("Quanti lati?");
-        int lati = sc.nextInt();
-        for(int i = 0; i < lati; i++) {
-            System.out.println("L'approssimazione del pi e' :" + i*Math.sin(rad/i));
+        System.out.println("Quante volte?");
+        int volte = sc.nextInt();
+        int lati = 6;
+        double apo = 0;
+        double l2 = 0;
+        for(int i = 0; i < volte; i++) {
+            apo = Math.sqrt(Math.pow(r,2) - Math.pow((l/2), 2));
+            l2 = Math.sqrt(Math.pow((r-apo), 2) + Math.pow((l/2), 2));
+            lati = lati * 2;
+            l=l2;
         }
+
+        double peri = lati * l2;
+        double pi = peri / (2 * r);
+        System.out.println("L'approssimazione del pi e' :" + pi);
     }
 }
