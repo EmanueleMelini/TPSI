@@ -1,39 +1,32 @@
 package MultiClient;
 
-import java.io.*;
+import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
-public class Server extends Thread {
-    private Socket clientSocket;
-    private final Scanner input;
+public class Server {
 
-    public Server(Socket clientSocket, Scanner input) {
-        this.clientSocket = clientSocket;
-        this.input = input;
+    public static void main(String[] args) {
+        Server server = new Server();
+        server.startMultiServer();
     }
 
-    public void run() {
+    public void startMultiServer() {
         try {
-            InputStream inputStream = clientSocket.getInputStream();
-            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
-            BufferedReader msgFromClient = new BufferedReader(inputStreamReader);
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(clientSocket.getOutputStream(), StandardCharsets.UTF_8);
-            PrintWriter msgToClient = new PrintWriter(outputStreamWriter, true);
-            String clientAction;
-            String serverAction;
-
+            ServerSocket serverSocket = new ServerSocket(32710);
+            Scanner input = new Scanner(System.in);
+            String end = "No";
             while (true) {
-                clientAction = msgFromClient.readLine();
-                System.out.println("Il Client " + clientSocket + " scrive: " + clientAction);
-                if (clientAction.equals("Fine")) break;
-                serverAction = input.nextLine();
-                msgToClient.println(serverAction);
+                if (end.equals("Si"))
+                    break;
+                System.out.println("Attesa di un client ");
+                Socket clientSocket = serverSocket.accept();
+                System.out.println("Chiudere la connessione dopo questa ?");
+                end = input.nextLine();
+                System.out.println("Client trovato " + clientSocket);
+                ServerThread serverThread = new ServerThread(clientSocket, input);
+                serverThread.start();
             }
-            System.out.println("Client disconnesso, in attesa di un nuovo client");
-            clientSocket.close();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
