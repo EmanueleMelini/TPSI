@@ -11,10 +11,10 @@ import java.util.Scanner;
 
 
 public class Server {
-    public static void main(String args[]){
+    public static void main(String[] args){
         try{
-            String messaggioDaTrasmettere = null;
-            String messaggioRicevuto = null;
+            String messaggioDaTrasmettere;
+            String messaggioRicevuto;
             int portNumber=32710;
             Scanner tastiera = new Scanner(System.in);
 
