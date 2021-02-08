@@ -1,23 +1,25 @@
 package EseCampana;
 
 public class Main extends Thread {
-    String message;
 
-    public Main(String message) {
-        this.message = message;
-    }
+	String message;
 
-    public void run() {
-        this.setName(message);
-        System.out.println("Sono il thread " + this.getName());
-    }
+	public Main(String message) {
+		this.message = message;
+	}
 
-    public String getMessage() {
-        return message;
-    }
+	public void run() {
+		this.setName(message);
+		System.out.println("Sono il thread " + this.getName());
+	}
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
 }
 

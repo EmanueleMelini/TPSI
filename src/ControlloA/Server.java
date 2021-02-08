@@ -1,48 +1,47 @@
 package ControlloA;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-
 public class Server {
-    public static void main(String[] args){
-        try{
-            String messaggioRicevuto;
-            int portNumber=32710;
 
-            ServerSocket s= new ServerSocket(portNumber);
-            System.out.println("SERVER avviato");
+	public static void main(String[] args) {
+		try {
+			String messaggioRicevuto;
+			int portNumber = 32710;
 
-            Socket socket = s.accept();
-            InputStream inputStream =socket.getInputStream();
-            InputStreamReader reader = new InputStreamReader(inputStream);
-            BufferedReader inputMes = new BufferedReader(reader);
+			ServerSocket s = new ServerSocket(portNumber);
+			System.out.println("SERVER avviato");
 
-            OutputStream streamInUscita = socket.getOutputStream();
-            PrintWriter out = new PrintWriter(streamInUscita,true);
+			Socket socket = s.accept();
+			InputStream inputStream = socket.getInputStream();
+			InputStreamReader reader = new InputStreamReader(inputStream);
+			BufferedReader inputMes = new BufferedReader(reader);
 
-            while(true){
-                messaggioRicevuto = inputMes.readLine();
-                System.out.println("Il SERVER riceve: "+messaggioRicevuto);
+			OutputStream streamInUscita = socket.getOutputStream();
+			PrintWriter out = new PrintWriter(streamInUscita, true);
 
-                if (messaggioRicevuto.equals("FINE")) break;
+			while(true) {
+				messaggioRicevuto = inputMes.readLine();
+				System.out.println("Il SERVER riceve: " + messaggioRicevuto);
 
-                int cont=0;
-                System.out.println("Scrivi risposta: ");
-                for(int i=0;i<messaggioRicevuto.length();i++) {
-                    if(((messaggioRicevuto.charAt(i) == 'a')||
-                            (messaggioRicevuto.charAt(i) == 'A')))
-                        cont++;
-                }
-                System.out.println(cont);
-                out.println(cont);
-            }
-            socket.close();
-        }catch(Exception e){e.printStackTrace();}
-    }
+				if(messaggioRicevuto.equals("FINE"))
+					break;
+
+				int cont = 0;
+				System.out.println("Scrivi risposta: ");
+				for(int i = 0; i < messaggioRicevuto.length(); i++) {
+					if(((messaggioRicevuto.charAt(i) == 'a') || (messaggioRicevuto.charAt(i) == 'A')))
+						cont++;
+				}
+				System.out.println(cont);
+				out.println(cont);
+			}
+			socket.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }

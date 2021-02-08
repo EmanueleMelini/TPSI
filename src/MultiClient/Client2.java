@@ -7,47 +7,52 @@ import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class Client2 {
-    //Client creato per provate il multiclient
-    private final int portNumber;
-    private final String host;
-    private final Socket socket;
-    private final Scanner input;
 
-    public Client2(int portNumber, String host, Scanner input) {
-        this.portNumber = portNumber;
-        this.host = host;
-        this.input = input;
-        socket = new Socket();
-    }
+	//Client creato per provate il multiclient
+	private final int portNumber;
+	private final String host;
+	private final Socket socket;
+	private final Scanner input;
 
-    public static void main(String[] args) {
-        Client2 client = new Client2(32710, "127.0.0.1", new Scanner(System.in));
-        client.runClient();
-    }
+	public Client2(int portNumber, String host, Scanner input) {
+		this.portNumber = portNumber;
+		this.host = host;
+		this.input = input;
+		socket = new Socket();
+	}
 
-    public void runClient() {
-        try {
-            socket.connect(new InetSocketAddress(host, portNumber));
-            System.out.println("Connesso ");
-            InputStream inputStream = socket.getInputStream();
-            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8); // creo il flusso di lettura per il client, contenente i dati inviati dal server
-            BufferedReader msgFromServer = new BufferedReader(inputStreamReader); // bufferizzazione del flusso di lettura
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8);
-            PrintWriter msgToServer = new PrintWriter(outputStreamWriter, true); // creo il flusso di scrittura del client, da inviare al server, il parametro true esegue Auto-flush()
-            String serverAction;
-            String clientAction; //creo uno string builder per creare una stringa composta
+	public static void main(String[] args) {
+		Client2 client = new Client2(32710, "127.0.0.1", new Scanner(System.in));
+		client.runClient();
+	}
 
-            while (true) {
-                clientAction = input.nextLine();
-                msgToServer.println(clientAction);
-                if (clientAction.equals("Fine")) break;
-                serverAction = msgFromServer.readLine();
-                System.out.println("Il Server scrive: "+serverAction);
-            }
+	public void runClient() {
+		try {
+			socket.connect(new InetSocketAddress(host, portNumber));
+			System.out.println("Connesso ");
+			InputStream inputStream = socket.getInputStream();
+			InputStreamReader inputStreamReader = new InputStreamReader(inputStream,
+					StandardCharsets.UTF_8); // creo il flusso di lettura per il client, contenente i dati inviati dal server
+			BufferedReader msgFromServer = new BufferedReader(inputStreamReader); // bufferizzazione del flusso di lettura
+			OutputStreamWriter outputStreamWriter = new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8);
+			PrintWriter msgToServer = new PrintWriter(outputStreamWriter,
+					true); // creo il flusso di scrittura del client, da inviare al server, il parametro true esegue Auto-flush()
+			String serverAction;
+			String clientAction; //creo uno string builder per creare una stringa composta
 
-            socket.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+			while(true) {
+				clientAction = input.nextLine();
+				msgToServer.println(clientAction);
+				if(clientAction.equals("Fine"))
+					break;
+				serverAction = msgFromServer.readLine();
+				System.out.println("Il Server scrive: " + serverAction);
+			}
+
+			socket.close();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 }
