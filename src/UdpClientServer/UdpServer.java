@@ -10,13 +10,13 @@ public class UdpServer {
 
 	private final int port;
 	private DatagramSocket socket;
-	private Scanner input;
+	private final Scanner input;
 
 	public UdpServer(int port, Scanner input) {
 		this.port = port;
 		this.input = input;
 		try {
-			socket = new DatagramSocket(port);
+			socket = new DatagramSocket(this.port);
 			System.out.println("Server avviato");
 		} catch(Exception e) {
 			System.out.println(e.toString());
