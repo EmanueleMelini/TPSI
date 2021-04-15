@@ -51,7 +51,10 @@ public class UserThread extends Thread {
 					String[] str = clientMessage.split(":");
 					//serverMessage = "[" + userName + "]: " + clientMessage;
 					serverMessage = "[" + userName + "]: " + str[0];
-					server.unicast(serverMessage, this, str[1]);
+					if(str[1].equals("broadcast"))
+						server.broadcast(serverMessage, this);
+					else
+						server.unicast(serverMessage, this, str[1]);
 				}
 
 			} while(!clientMessage.equals("bye"));
