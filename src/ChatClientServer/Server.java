@@ -33,4 +33,44 @@ public class Server {
 		}
 	}
 
+	public static void main(String[] args) {
+		int port = 8989;
+		Server server = new Server(port);
+		server.startServer();
+	}
+
+	public void broadcast(String message, UserThread excludedUser) {
+		userThreads.forEach(userThread -> {
+			if(excludedUser != userThread)
+				userThread.sendMessage(message);
+		});
+	}
+
+	public void unicast(String message, UserThread excludedUser, String destUser) {
+		userThreads.forEach(userThread -> {
+			if(excludedUser != userThread)
+				if(userThread.getUserName().equals(destUser))
+					userThread.sendMessage(message);
+		});
+	}
+
+	public void addUser(String user) {
+		users.add(user);
+	}
+
+	public void removeUser(String user, UserThread userThread) {
+		boolean removeUser = users.remove(user);
+		if(removeUser) {
+			userThreads.remove(userThread);
+			System.out.println("The user " + user + " disconnected from the server");
+		}
+	}
+
+	public Set<String> getUsers() {
+		return this.users;
+	}
+
+	public boolean hasUsers() {
+		return !this.users.isEmpty();
+	}
 }

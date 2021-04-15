@@ -1,9 +1,6 @@
 package ChatClientServer;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 
 public class UserThread extends Thread{
@@ -23,9 +20,33 @@ public class UserThread extends Thread{
 		try {
 			InputStream inputStream = socket.getInputStream();
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+			OutputStream outputStream = socket.getOutputStream();
+			printWriter = new PrintWriter(outputStream, true);
+
+			printUsers();
+
+			String user = bufferedReader.readLine();
+			server.addUser(user);
+			//TODO:finire
+
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
+	}
+
+	public void printUsers() {
+		if(server.hasUsers())
+			printWriter.println("Connected users: " + server.getUsers());
+		else
+			printWriter.println("No other users connected");
+	}
+
+	public void sendMessage(String message) {
+		printWriter.println(message);
+	}
+
+	public String getUserName() {
+		return userName;
 	}
 }
