@@ -62,7 +62,13 @@ public class ChatServer {
 	 */
 	void broadcast(String message, UserThread excludeUser) {
 		for(UserThread aUser : userThreads) {
-			if (aUser != excludeUser)
+			if(aUser != excludeUser)
+				aUser.sendMessage(message);
+		}
+	}
+
+	void broadcast(String message) {
+		for(UserThread aUser : userThreads) {
 			aUser.sendMessage(message);
 		}
 	}

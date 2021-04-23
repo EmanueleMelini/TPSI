@@ -60,7 +60,7 @@ public class UserThread extends Thread {
 			} while(!clientMessage.equals("bye"));
 
 			serverMessage = userName + " has quitted.";
-			server.broadcast(serverMessage, this);
+			server.broadcast(serverMessage);
 
 			server.removeUser(userName, this);
 			socket.close();
