@@ -1,8 +1,5 @@
 package ChatClientServer;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.Socket;
 
 public class Client {
@@ -10,8 +7,6 @@ public class Client {
 	private final String hostname;
 	private final int port;
 	private String userName;
-	private InputStream inputStream;
-	private BufferedReader bufferedReader;
 
 	public Client(String hostname, int port) {
 		this.hostname = hostname;
@@ -23,28 +18,10 @@ public class Client {
 			Socket socket = new Socket(hostname, port);
 			System.out.println("Connected to the server");
 
-			try {
-				inputStream = socket.getInputStream();
-				bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-			} catch(Exception e) {
-				System.out.println(e.getMessage());
-				e.printStackTrace();
-			}
-
-			String serverAction;
-			do {
-				try {
-					serverAction = bufferedReader.readLine();
-					System.out.println(serverAction);
-					if(this.getUserName() != null && !serverAction.equals("end"))
-						System.out.println("<" + this.getUserName() + ">");
-
-				}  catch(Exception e) {
-					System.out.println(e.getMessage());
-					e.printStackTrace();
-					break;
-				}
-			} while(!serverAction.equals(this.getUserName() + " disconnected"));
+			ReadThread readThread = new ReadThread(socket, this);
+			readThread.start();
+			WriteThread writeThread = new WriteThread(socket, this);
+			writeThread.start();
 
 		} catch(Exception e) {
 			System.out.println(e.getMessage());

@@ -3,7 +3,7 @@ package ChatClientServer;
 import java.io.*;
 import java.net.Socket;
 
-public class UserThread extends Thread{
+public class UserThread extends Thread {
 
 	private final Socket socket;
 	private final Server server;
@@ -27,7 +27,37 @@ public class UserThread extends Thread{
 
 			String user = bufferedReader.readLine();
 			server.addUser(user);
-			//TODO:finire
+			userName = user;
+			this.setName(userName);
+
+			String serverAction = "New user connected: " + userName;
+			server.broadcast(serverAction, this);
+
+			String clientAction;
+
+			do {
+				clientAction = bufferedReader.readLine();
+				if(clientAction.equals("end")) {
+					serverAction = "<" + userName + ">" + clientAction;
+					server.broadcast(serverAction, this);
+				} else {
+					String[] clientMessage = clientAction.split(":");
+					String message = clientMessage[0];
+					String destUser = clientMessage[1];
+					serverAction = "<" + userName + ">" + message;
+					if(destUser.equals("broadcast")) {
+						server.broadcast(serverAction, this);
+					} else {
+						server.unicast(serverAction, this, destUser);
+					}
+				}
+			} while(!clientAction.equals("end"));
+
+			serverAction = userName + " disconnected";
+			server.broadcast(serverAction);
+			server.removeUser(userName, this);
+
+			socket.close();
 
 		} catch(Exception e) {
 			System.out.println(e.getMessage());
@@ -49,4 +79,5 @@ public class UserThread extends Thread{
 	public String getUserName() {
 		return userName;
 	}
+
 }

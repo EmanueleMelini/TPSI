@@ -46,10 +46,15 @@ public class Server {
 		});
 	}
 
+	public void broadcast(String message) {
+		userThreads.forEach(userThread -> userThread.sendMessage(message));
+	}
+
 	public void unicast(String message, UserThread excludedUser, String destUser) {
 		userThreads.forEach(userThread -> {
 			if(excludedUser != userThread)
-				if(userThread.getUserName().equals(destUser))
+				if(userThread.getUserName()
+						.equals(destUser))
 					userThread.sendMessage(message);
 		});
 	}
@@ -73,4 +78,5 @@ public class Server {
 	public boolean hasUsers() {
 		return !this.users.isEmpty();
 	}
+
 }
